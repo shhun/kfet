@@ -6,37 +6,32 @@
 </head>
 <body>
         <p>
-        La <br><b>K-FET</b> <br>est <br> <span id="status">ouverte</span> 
+        La <br><b>K-FET</b> <br>est <br> <span id="status"></span> 
         </p>
 
         <script>
-            let elem = document.getElementById("status");
-            let opened = true;
+            let elem = document.getElementById("status")
+            let opened = true
             function update () {
-                elem.className = opened ? "opened" : "closed";
-                elem.innerText = opened ? "ouverte" : "fermee";
+                elem.className = opened ? "opened" : "closed"
+                elem.innerText = opened ? "ouverte" : "fermee"
             }
-            update();
             
             let socket = null
             try {
-                socket = new WebSocket("ws://localhost:7800");
+                socket = new WebSocket("ws://localhost:7800")
             } catch (ex) {
                 console.error(ex)
             }
 
             socket.onopen = function(event) {
-                console.log("Connexion avec la ws réussie");
+                console.log("Connexion avec la ws réussie")
                 this.onmessage = function(event) {
                         console.log(event.data)
-                        if (event.data == "opened") {
-                            opened = true;
-                        } else {
-                            opened = false;
-                        };
-                        update();
-                };
-            };
+                        event.data == "opened" ? opened = true : opened = false
+                        update()
+                }
+            }
         </script>
 </body>
 </html>

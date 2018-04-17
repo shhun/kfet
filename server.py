@@ -4,39 +4,62 @@ import json
 import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+from collections import defaultdict
 
 FILE = "status_kfet.json"
 
+def json_error():
+    print("JSON error : attribute not found")
+    return "ERROR"
+
+# load kfet status from json file f
+def get_status(f):
+    fd = open(f)
+    kfet = defaultdict(json_error, json.load(fd))
+    fd.close()
+    return kfet["status"]
+
 class UpdateHandler(FileSystemEventHandler):
 
-    def __init__(self, f, ws):
+    def __init__(self, f):
         super().__init__()
-        self.f = f
-        self.ws = ws
+        self.connected = []
 
     async def send(self, msg):
-        await (self.ws).send(msg)
+        for i, ws in enumerate(self.connected):
+            try : 
+                await ws.send(msg)
+            except websockets.ConnectionClosed:
+                self.connected[i] = False
+            
+        self.connected = list(filter((lambda ws : ws != False), self.connected))
 
     def on_modified(self, event):
-        fd = open(self.f, 'r')
-        kfet = json.loads("".join(fd.readlines()))
-        content = kfet["status"]
-        
-        asyncio.get_event_loop().run_until_complete(self.send(content))
+        status = get_status(FILE)
+ 
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(self.send(status))
+
+
+event_handler = UpdateHandler(FILE)
 
 async def update(websocket, path):
+    event_handler.connected.append(websocket)
+
+    # init connection by sending the current
+    # status
+    await websocket.send(get_status(FILE))
+
     while True:
-        await asyncio.sleep(0.5) 
+        await asyncio.sleep(1) 
 
 websocket = websockets.serve(update, 'localhost', 7800)
 loop = asyncio.get_event_loop()
-event_handler = UpdateHandler(FILE, websocket)
 observer = Observer()
 observer.schedule(event_handler, "./")
 observer.start()
 
-
+asyncio.set_event_loop(loop)
 loop.run_until_complete(websocket)
 loop.run_forever()
-    
- 
