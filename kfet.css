@@ -1,0 +1,34 @@
+body {
+    background : url(blackboard.jpg);
+    background-size : cover;
+}
+
+@font-face {
+    font-family : kFont;
+    src : url(FlunkiesBB.otf)
+}
+
+b {
+    font-size: 120%;
+}
+
+p {
+    font-size : 8.4em;
+    text-transform : uppercase;
+    text-align : center;
+    color : #FFF;
+    font-family : kFont;
+}
+
+#status {
+    font-size : 120%;
+}
+
+.opened {
+    color : #009973;
+}
+
+.closed {
+    color : #b30000;
+}
+
