@@ -10,13 +10,12 @@ FILE = "status_kfet.json"
 
 def json_error():
     print("JSON error : attribute not found")
-    return "ERROR"
+    return
 
 # load kfet status from json file f
 def get_status(f):
-    fd = open(f)
-    kfet = defaultdict(json_error, json.load(fd))
-    fd.close()
+    with open(f) as fd:
+        kfet = defaultdict(json_error, json.load(fd))
     return kfet["status"]
 
 class UpdateHandler(FileSystemEventHandler):
@@ -31,8 +30,9 @@ class UpdateHandler(FileSystemEventHandler):
                 await ws.send(msg)
             except websockets.ConnectionClosed:
                 self.connected[i] = False
-            
-        self.connected = list(filter((lambda ws : ws != False), self.connected))
+        
+        # remove all disconnected webscockets 
+        self.connected = list(filter((lambda connected: not connected), self.connected))
 
     def on_modified(self, event):
         status = get_status(FILE)
