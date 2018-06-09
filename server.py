@@ -32,7 +32,7 @@ class UpdateHandler(FileSystemEventHandler):
                 self.connected[i] = False
         
         # remove all disconnected webscockets 
-        self.connected = list(filter((lambda connected: not connected), self.connected))
+        self.connected = list(filter((lambda connected: connected), self.connected))
 
     def on_modified(self, event):
         status = get_status(FILE)
