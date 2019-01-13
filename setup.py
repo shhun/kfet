@@ -8,6 +8,9 @@ setup(name='kfet',
       install_requires=[
           'websockets',
           'watchdogs',
+          'passlib',
+          'json',
+          'flask',
       ],
       zip_safe=False)
 

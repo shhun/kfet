@@ -2,6 +2,7 @@ import asyncio
 import websockets
 import json
 import time
+import hashlib
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from collections import defaultdict
