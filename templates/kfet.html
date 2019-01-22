@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>K-Fet ENSL</title>
-    <link rel="stylesheet" href="kfet.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='kfet.css') }}">
 </head>
 <body>
         <p>
@@ -10,6 +10,8 @@
         </p>
 
         <script>
+			let wsip = "{{ IP }}"
+			let port = "{{ PORT }}"
             let elem = document.getElementById("status")
             let opened = true
             function update () {
@@ -19,7 +21,7 @@
             
             let socket = null
             try {
-                socket = new WebSocket("ws://localhost:7800")
+                socket = new WebSocket("ws://"+wsip+":"+port)
             } catch (ex) {
                 console.error(ex)
             }

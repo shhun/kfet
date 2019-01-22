@@ -9,7 +9,6 @@ setup(name='kfet',
           'websockets',
           'watchdogs',
           'passlib',
-          'json',
           'flask',
       ],
       zip_safe=False)
