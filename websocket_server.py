@@ -1,8 +1,6 @@
 import asyncio
 import websockets
-import json
-import time
-import hashlib
+from utils import json_error, get_status
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from collections import defaultdict
@@ -11,16 +9,6 @@ from collections import defaultdict
 FILE = "status_kfet.json"
 IP = "0.0.0.0"
 PORT = 8080
-
-def json_error():
-    print("JSON error : attribute not found")
-    return
-
-# load kfet status from json file f
-def get_status(f):
-    with open(f) as fd:
-        kfet = defaultdict(json_error, json.load(fd))
-    return kfet["status"]
 
 class UpdateHandler(FileSystemEventHandler):
 

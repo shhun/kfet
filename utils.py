@@ -1,5 +1,4 @@
 import json
-import json
 
 KFET_STATUS = "status_kfet.json"
 
@@ -13,3 +12,14 @@ def toggle_state():
 			data["status"] = "closed"
 		fd.seek(0)
 		json.dump(data, fd)
+
+def json_error():
+    print("JSON error : attribute not found")
+    return
+
+# load kfet status from json file f
+def get_status(f):
+    with open(f) as fd:
+        kfet = defaultdict(json_error, json.load(fd))
+    return kfet["status"]
+

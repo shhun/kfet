@@ -7,7 +7,7 @@ setup(name='kfet',
       author='shhun',
       install_requires=[
           'websockets',
-          'watchdogs',
+          'watchdog',
           'passlib',
           'flask',
       ],

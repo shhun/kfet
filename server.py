@@ -4,9 +4,9 @@ import utils
 
 app = Flask(__name__)
 
-IP="127.0.0.1"
+IP="0.0.0.0"
 # TODO set the PORT specified in websocket_server.py
-PORT="8080"
+PORT="80"
 # TODO update the password
 secret_hash = pbkdf2_sha256.hash("somepassword")
 
@@ -33,3 +33,5 @@ def login():
 def	check_auth(password):
 	return pbkdf2_sha256.verify(password, secret_hash)
 
+if __name__ == "__main__":
+    app.run(host=IP, port=PORT)
