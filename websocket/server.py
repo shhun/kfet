@@ -6,9 +6,9 @@ from watchdog.events import FileSystemEventHandler
 from collections import defaultdict
 
 # TODO set FILE/IP/PORT for the websocket
-FILE = "status_kfet.json"
+FILE = "/data/status_kfet.json"
 IP = "0.0.0.0"
-PORT = 8080
+PORT = 80
 
 class UpdateHandler(FileSystemEventHandler):
 
@@ -33,7 +33,6 @@ class UpdateHandler(FileSystemEventHandler):
         asyncio.set_event_loop(loop)
         loop.run_until_complete(self.send(status))
 
-
 event_handler = UpdateHandler(FILE)
 
 async def update(websocket, path):
@@ -46,12 +45,14 @@ async def update(websocket, path):
     while True:
         await asyncio.sleep(1) 
 
-websocket = websockets.serve(update, IP, PORT)
-loop = asyncio.get_event_loop()
-observer = Observer()
-observer.schedule(event_handler, "./")
-observer.start()
+if __name__=="__main__":
 
-asyncio.set_event_loop(loop)
-loop.run_until_complete(websocket)
-loop.run_forever()
+    websocket = websockets.serve(update, IP, PORT)
+    loop = asyncio.get_event_loop()
+    observer = Observer()
+    observer.schedule(event_handler, "/data")
+    observer.start()
+    
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(websocket)
+    loop.run_forever()

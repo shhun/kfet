@@ -1,3 +1,4 @@
+from collections import defaultdict
 import json
 
 KFET_STATUS = "status_kfet.json"
